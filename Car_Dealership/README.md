@@ -1,9 +1,6 @@
 # Car Dealership
-## Due Date: May 13th
 ### Description
 The Car Dealership app is a console-based application that facilitates the purchasing of cars. An employee can add cars to the lot and manage offers for those cars, while a customer can view the cars on the lot and make offers.
-### Purpose
-We want to see that you can meet deadlines and that you can code. You are expected to complete the following requirements and give a 5 minute presentation of your project to our QC team.
 ### Requirements
 Functionality should reflect the below user stories.
 Data is stored in a database.
@@ -26,4 +23,3 @@ A minimum of one (1) JUnit test is written to test some functionality.
 [ ] As a customer, I can view my remaining payments for a car.
 [ ] As an employee, I can view all payments.
 [ ] As the system, I can calculate the monthly payment.
-##### Presentation should include demo, then cool implementation
