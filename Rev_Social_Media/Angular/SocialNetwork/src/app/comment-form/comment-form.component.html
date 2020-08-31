@@ -1,0 +1,41 @@
+<div class="comment-form-borders">
+  <div class="row pb-2 post-borders">
+    <div class="col-3 text-center">
+      <div class="text-center p-0 m-0 text-nowrap">
+        {{ user.username }}
+      </div>
+      <!-- <div [ngStyle]="picture" class="avatar"></div> -->
+      <img
+        [src]="'data:image/jpg;base64,' + user.picLink"
+        height="70px"
+        width="70px"
+        alt=""
+      />
+    </div>
+
+    <div class="col-9">
+      <form #f2="ngForm" (ngSubmit)="submitCommentForm(f2.value)">
+        <textarea
+          ngModel
+          [(ngModel)]="textValue"
+          #body="ngModel"
+          class="form-control"
+          style="border-radius: 0 5px 0 0;"
+          placeholder="Please enter your comment"
+          name="body"
+          cols="30"
+          rows="2"
+        ></textarea>
+        <div class="ht2">
+          <input
+            style="border-radius: 0 0 5px 0;"
+            type="submit"
+            class="btn btn-info form-control"
+            value="submit comment"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="row post-borders" style="height: 5px;"></div>

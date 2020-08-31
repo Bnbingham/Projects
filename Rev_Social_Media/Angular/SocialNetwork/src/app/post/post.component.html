@@ -1,0 +1,65 @@
+<div class="container rounded post-shadow">
+  <div class="row color2 ht2 post-topBar">
+    <!-- <a class="col-3 close text-left pl-3" (click)="postToggled()">
+      <span *ngIf="!showPost">^</span>
+      <span *ngIf="showPost">v</span>
+    </a> -->
+    <div style="padding-top: 5px;" class="col-9">
+      {{ post.date | date: "medium" }}
+    </div>
+  </div>
+
+  <div *ngIf="showPost">
+    <div class="post-bg2 row post-borders">
+      <div class="col-3 text-center">
+        <h4 class="text-center">
+          {{ post.username }}
+        </h4>
+        <!-- <div [ngStyle]="picture" class="avatar"></div> -->
+        <img
+          [src]="'data:image/jpg;base64,' + post.picLink"
+          height="100px"
+          width="100px"
+          alt=""
+        />
+      </div>
+
+      <div class="col-9">
+        <hr />
+        <div class="row">
+          <img
+            [src]="'data:image/jpg;base64,' + post.image"
+            height="100px"
+            width="100px"
+            alt=""
+          />
+          <div class="col-8">{{ post.post }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row post-borders">
+      <like-container
+        [user]="user"
+        [post]="post"
+        class="col-6"
+      ></like-container>
+      <comments-toggle
+        (toggled)="commentsToggled()"
+        class="col-6"
+        [post]="post"
+      ></comments-toggle>
+    </div>
+  </div>
+
+  <comment-container
+    [user]="user"
+    [post]="post"
+    [comments]="post.comments"
+    *ngIf="showComments"
+  ></comment-container>
+
+  <div class="row color2 ht3 post-botBar">
+    <div class="col-9"></div>
+  </div>
+</div>

@@ -1,0 +1,117 @@
+<div id="header-bar" class="p-3 color1">
+  <div class="container">
+    <div class="row">
+      <div class="col-6">
+        <img class="thelogo" src="../../assets/img/RevatureSquawk.jpg" />
+      </div>
+      <div class="col-6 text-right">
+        <a id="logout-btn" class="text-info" (click)="onLogout()" href="#"
+          >🅻🅾🅶🅾🆄🆃</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-3">
+      <button
+        (click)="view = 'Feed'"
+        [class.btn-info]="view == 'Feed'"
+        class="form-control btn btn-secondary"
+      >
+        View My Feed
+      </button>
+      <button
+        (click)="view = 'UpdateProfile'"
+        [class.btn-info]="view == 'UpdateProfile'"
+        class="form-control btn btn-secondary"
+      >
+        Update Profile
+      </button>
+      <button
+        (click)="view = 'SearchNetwork'"
+        [class.btn-info]="view == 'SearchNetwork'"
+        class="form-control btn btn-secondary"
+      >
+        Search Network
+      </button>
+      <div class="container" *ngIf="view == 'SearchNetwork'">
+        <div class="row">
+          <div
+            (click)="tab = 'all'"
+            [class.activeTab]="tab == 'all'"
+            [class.inactiveTab]="tab != 'all'"
+            class="col-6 inactiveTab"
+          >
+            All
+          </div>
+          <div
+            (click)="tab = 'search'"
+            [class.activeTab]="tab == 'search'"
+            [class.inactiveTab]="tab != 'search'"
+            class="col-6 inactiveTab"
+          >
+            Search
+          </div>
+        </div>
+      </div>
+      <div class="tabBody" *ngIf="view == 'SearchNetwork'">
+        <div *ngIf="tab == 'all'">
+          <h4 class="text-center">🆂🅲🆁🅾🅻🅻 🆃🅷🆁🅾🆄🅶🅷 🅾🆄🆁 🅵🆁🅸🅴🅽🅳🆂</h4>
+          <div class="scrollList">
+            <div *ngFor="let item of users">
+              <button
+                (click)="changeFocus(item)"
+                class="btn btn-block btn-outline-light"
+              >
+                {{ item.username }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="tab == 'search'">
+          <search-network
+            (changeFocus)="changeFocus($event)"
+            [users]="users"
+          ></search-network>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-9">
+      <div [ngSwitch]="view">
+        <ng-template [ngSwitchCase]="'Feed'">
+          <div class="">
+            <post-container
+              [isLoading]="isLoading"
+              [user]="user"
+              [postFeed]="posts"
+              (newPost)="pushPost($event)"
+            ></post-container>
+          </div>
+        </ng-template>
+        <ng-template [ngSwitchCase]="'UpdateProfile'">
+          <div class="">
+            <update-profile
+              (newUser)="pushUser($event)"
+              [user]="user"
+            ></update-profile>
+          </div>
+        </ng-template>
+        <ng-template [ngSwitchCase]="'SearchNetwork'">
+          <div class="">
+            <profile-information [focus]="focus"></profile-information>
+            <div class="post-bg1" *ngFor="let post of focusPosts">
+              <focused-user-posts
+                [focus]="focus"
+                [post]="post"
+                [user]="user"
+              ></focused-user-posts>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

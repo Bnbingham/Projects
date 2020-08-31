@@ -1,0 +1,56 @@
+<div class="m-auto row post-borders container">
+  <div class="col-3 text-center">
+    <div class="text-center p-0 m-0 text-nowrap">
+      {{ user.username }}
+    </div>
+    <!-- <div [ngStyle]="picture" class="avatar"></div> -->
+    <img
+      [src]="'data:image/jpg;base64,' + user.picLink"
+      height="100px"
+      width="100px"
+      alt=""
+    />
+  </div>
+
+  <div class="col-9">
+    <form #f="ngForm" (ngSubmit)="submitForm(f.value)">
+      <div style="display: flex;">
+        <img
+          style="padding-top: 8px;"
+          *ngIf="imagePreview"
+          [src]="imagePreview"
+          height="100px"
+          width="100px"
+          alt=""
+        />
+        <textarea
+          ngModel
+          #body="ngModel"
+          class="form-control"
+          [placeholder]="placeholderText"
+          [(ngModel)]="textValue"
+          name="body"
+          cols="30"
+          rows="4"
+        ></textarea>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="form-control col-6 text-center">
+            <label id="addImage-btn" for="image" class="text-center"
+              >Add image
+              <input
+                (change)="onFileChanged($event)"
+                style="display: none;"
+                type="file"
+                name="image"
+                id="image"
+              />
+            </label>
+          </div>
+          <input type="submit" class="form-control col-6" value="submit" />
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

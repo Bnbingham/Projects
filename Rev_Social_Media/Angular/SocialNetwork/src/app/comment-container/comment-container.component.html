@@ -1,0 +1,14 @@
+<div class="">
+  <div style="padding-top: 10px;">
+    <comment-form
+      style="padding-top: 10px;"
+      [post]="post"
+      [user]="user"
+      (newComment)="pushComment($event)"
+    ></comment-form>
+  </div>
+
+  <div class="row post-borders" *ngFor="let item of comments">
+    <comment class="container" [in]="item"></comment>
+  </div>
+</div>

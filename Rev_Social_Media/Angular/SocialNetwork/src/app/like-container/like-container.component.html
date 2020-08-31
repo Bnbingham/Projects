@@ -1,0 +1,10 @@
+<div class=" ">
+  <button
+    class="btn ht2 p-0 btn-block"
+    [class.btn-secondary]="!post.isLiked"
+    [class.btn-success]="post.isLiked"
+    (click)="onClick()"
+  >
+    {{ post.likeCount }} Likes
+  </button>
+</div>

@@ -1,0 +1,83 @@
+<h2 style="font-size: large;">🆄🅿🅳🅰🆃🅴 🅿🆁🅾🅵🅸🅻🅴 🅸🅽🅵🅾🆁🅼🅰🆃🅸🅾🅽</h2>
+<div class="row">
+  <div class="col-4 text-center m-a">
+    <div class="row container">
+      <!-- <div [ngStyle]="picture" class="avatar"></div> -->
+      <img
+        *ngIf="!imagePreview"
+        [src]="image"
+        height="100px"
+        width="100px"
+        alt=""
+      />
+      <img
+        *ngIf="imagePreview"
+        [src]="imagePreview"
+        height="100px"
+        width="100px"
+        alt=""
+      />
+    </div>
+    <div>
+      <form>
+        <input
+          type="file"
+          id="fileInput"
+          name="profilePic"
+          accept="image/*"
+          (change)="onFileChanged($event)"
+        />
+        <input
+          class="d-block btn btn-outline-light"
+          type="submit"
+          id="btn1"
+          (click)="onUpload()"
+        />
+      </form>
+    </div>
+  </div>
+
+  <div class="UserInfo" id="userrInfo">
+    🅵🅸🆁🆂🆃 🅽🅰🅼🅴 : {{ user.firstName }}
+    <br />
+    🅻🅰🆂🆃 🅽🅰🅼🅴 : {{ user.lastName }}
+    <br />
+    🆄🆂🅴🆁🅽🅰🅼🅴 : {{ user.username }}
+    <br />
+    🅴🅼🅰🅸🅻 : {{ user.email }}
+    <br />
+    🅱🅸🅾 : {{ user.bio }}
+  </div>
+  <div class="UpdateInfo" id="updateInfoo">
+    <p>🆄🅿🅳🅰🆃🅴 🆄🆂🅴🆁 🅸🅽🅵🅾🆁🅼🅰🆃🅸🅾🅽</p>
+    <input
+      [(ngModel)]="firstNameValue"
+      type="text"
+      placeholder="First Name"
+      id="fName"
+    />
+    <br />
+    <input
+      [(ngModel)]="lastNameValue"
+      type="text"
+      placeholder="Last Name"
+      id="lName"
+    />
+    <br />
+    <textarea
+      [(ngModel)]="bioValue"
+      placeholder="Bio"
+      rows="4"
+      cols="50"
+      id="thebio"
+    ></textarea>
+    <br />
+    <button
+      class="d-block btn btn-outline-light"
+      type="submit"
+      (click)="updateUserInfo()"
+    >
+      Submit Changes
+    </button>
+  </div>
+</div>

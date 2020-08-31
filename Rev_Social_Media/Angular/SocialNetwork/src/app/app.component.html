@@ -1,0 +1,9 @@
+<login-page
+  *ngIf="view == 'login'"
+  (userChange)="userChange($event)"
+></login-page>
+<home-page
+  *ngIf="view == 'home'"
+  (logout)="onLogout()"
+  [user]="user"
+></home-page>

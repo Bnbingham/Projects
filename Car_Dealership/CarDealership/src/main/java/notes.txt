@@ -1,0 +1,41 @@
+
+logIn
+register
+
+customerMenu
+-view(cars:available)
+ -focus(car)
+ --register(contract),submitted
+ 
+-view(contracts:active:user)
+ -focus(contract)
+ --view(contract:payments)
+ 
+employeeMenu
+-view(car:available)
+ -focus(car)
+  --remove(car),submitted
+
+-view(contracts:pending)
+ -focus(contract)
+ --update(contract),submitted
+ 
+-register(car),submitted
+
+-view(contracts:active)
+
+
+
+logiIn     
+register(car,user,offer,contract,payment)
+view(cars:availble,cars:owned,contracts:user,contract:payments,contracts:pending)
+focus(car,contract)
+remove(car)
+
+user login
+Add car
+customer view cars
+customer make offer
+customer
+
+

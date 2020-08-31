@@ -1,0 +1,29 @@
+<h4 class="text-center">🅴🅽🆃🅴🆁 🅰 🅵🆁🅸🅴🅽🅳🆂 🆄🆂🅴🆁🅽🅰🅼🅴</h4>
+<form #fSearch="ngForm" (ngSubmit)="searchFor(fSearch.value)">
+  <input type="text" ngModel #search="ngModel" name="username" />
+
+  <button class="d-block btn btn-outline-light">Submit</button>
+</form>
+<div *ngIf="searchResult">
+  <div *ngIf="searchResult == []">
+    Sorry, username not found.
+  </div>
+  <div *ngIf="searchResult != 'none'">
+    <div *ngFor="let result of searchResult">
+      <div class="row">
+        <button
+          (click)="selectNewFocus(result)"
+          class="d-block btn btn-outline-light"
+        >
+          {{ result.username }}
+        </button>
+      </div>
+      <!-- <img
+        [src]="'data:image/jpg;base64,' + result.picLink"
+        height="100"
+        width="100"
+        alt=""
+      /> -->
+    </div>
+  </div>
+</div>

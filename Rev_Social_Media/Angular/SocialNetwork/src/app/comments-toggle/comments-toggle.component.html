@@ -1,0 +1,12 @@
+<div class=" ">
+  <button
+    class="btn ht2 p-0 btn-block"
+    [class.btn-secondary]="!isSelected"
+    [class.btn-info]="isSelected"
+    (click)="onClick()"
+  >
+    <span *ngIf="post.commentCount == 0">Comment</span>
+    <span *ngIf="post.commentCount == 1">{{ post.commentCount }} Comment</span>
+    <span *ngIf="post.commentCount > 1">{{ post.commentCount }} Comments</span>
+  </button>
+</div>

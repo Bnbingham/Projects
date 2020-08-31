@@ -1,0 +1,21 @@
+[INFO ] 2020-05-13 09:25:58.916 [main] LogThis - Ran program
+[INFO ] 2020-05-13 09:26:21.091 [main] LogThis - User 3 [username=Brad, password=password, type=Customer]
+Logged in
+[INFO ] 2020-05-13 09:26:53.945 [main] LogThis - Offer created for4, 3, 1500.0, 12 months
+[INFO ] 2020-05-13 09:28:36.943 [main] LogThis - Ran program
+[INFO ] 2020-05-13 09:37:58.046 [main] LogThis - Ran program
+[INFO ] 2020-05-13 09:38:14.595 [main] LogThis - Created user Brad
+[INFO ] 2020-05-13 09:38:19.564 [main] LogThis - User 3 [username=Brad, password=password, type=Customer]
+Logged in
+[INFO ] 2020-05-13 09:39:27.805 [main] LogThis - Offer created for4, 3, 1500.0, 12 months
+[INFO ] 2020-05-13 10:45:54.106 [main] LogThis - Ran program
+[INFO ] 2020-05-13 10:51:17.382 [main] LogThis - Created user Brad
+[INFO ] 2020-05-13 10:51:21.636 [main] LogThis - User 3 [username=Brad, password=password, type=Customer]
+Logged in
+[INFO ] 2020-05-13 10:52:14.647 [main] LogThis - Offer created for4, 3, 1500.0, 12 months
+[INFO ] 2020-05-13 10:52:17.620 [main] LogThis - User 3 [username=Brad, password=password, type=Customer]
+Logged in
+[INFO ] 2020-05-13 10:52:26.253 [main] LogThis - Ran program
+[INFO ] 2020-05-13 10:53:14.811 [main] LogThis - Ran program
+[INFO ] 2020-05-14 00:26:45.222 [main] LogThis - Ran program
+[INFO ] 2020-05-14 00:28:48.697 [main] LogThis - Ran program

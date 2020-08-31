@@ -1,0 +1,12 @@
+<div
+  style="border-radius: 5px; padding-top: 8px;"
+  class="shadow1 container ht1 color1"
+>
+  🆁🅴🅲🅴🅽🆃 🆂🆀🆄🅰🆆🅺🆂
+</div>
+<div class="feed-container">
+  <div *ngIf="posts.length == 0" class="container text-center">No posts</div>
+  <div class="post-bg1" *ngFor="let item of posts">
+    <post [user]="user" [in]="item"></post>
+  </div>
+</div>

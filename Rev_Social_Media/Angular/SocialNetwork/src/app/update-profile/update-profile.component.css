@@ -1,0 +1,12 @@
+.UpdateInfo {
+    position: absolute;
+    top: 130%;
+}
+* {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+#btn1 {
+    position: absolute;
+    left: 12%;
+}

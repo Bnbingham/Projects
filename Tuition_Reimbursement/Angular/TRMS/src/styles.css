@@ -1,0 +1,142 @@
+* {
+  margin: 0;
+  padding: 0px;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+  border-radius: 5px;
+  border-color: floralwhite;
+}
+
+.red {
+  color: red;
+}
+.centerCenter {
+  height: 80vh;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+.formBox {
+  border: 1px solid #00000063;
+  width: 400px;
+  padding: 10px;
+  background-color: #d3d3d38f;
+  box-shadow: 2px 2px 6px dimgrey;
+}
+h2 {
+  text-align: center;
+}
+h3 {
+  padding-top: 20px;
+}
+input:focus {
+  outline-color: lightgray;
+}
+input,
+textarea,
+.formElement,
+select,
+.header,
+ul {
+  width: 100%;
+  padding: 5px;
+  resize: none;
+}
+.row {
+  display: flex;
+}
+.col {
+  width: 50%;
+}
+.alert {
+  background-color: rgb(235, 142, 142);
+  padding: 5px;
+}
+.dashboardBox {
+  max-width: 800px;
+  margin: auto;
+}
+.header {
+  margin: auto;
+}
+a {
+  padding-right: 10px;
+  text-decoration: underline;
+}
+a:hover {
+  color: #0084ff;
+}
+.infoBox {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+ul {
+  list-style: none;
+}
+.listTitle {
+  border: 1px solid black;
+  background-color: lightgray;
+  padding: 9px;
+}
+.btnBox {
+  min-width: 100px;
+  background-color: #d3d3d38f;
+  border-radius: 5px 0 0 5px;
+}
+.msgBox {
+  font-size: small;
+  padding-left: 5px;
+}
+button {
+  width: 50%;
+  height: 30px;
+  background-color: #95ccec;
+  color: #0084ff;
+  border-style: hidden;
+  border-radius: 5px 0 0 5px;
+}
+input[type="submit"] {
+  background-color: #95ccec;
+  color: #0084ff;
+  border-style: ridge;
+  border-color: #00a2ff66;
+}
+.disabled {
+  background-color: whitesmoke;
+}
+button:hover {
+  background-color: #00a2ff;
+  color: white;
+}
+input[type="submit"]:hover {
+  background-color: #00a2ff;
+  color: white;
+  border-color: white;
+}
+li {
+  border: 1px solid black;
+  height: 32px;
+  display: flex;
+  box-shadow: 0.5px 0.5px 3px grey;
+}
+#grade,
+#presentation {
+  width: auto;
+}
+.col25 {
+  width: 25%;
+}
+.col75 {
+  width: 75%;
+}
+#welcome {
+  padding: 10px 0px;
+}
+.active {
+  color: #0d93e1;
+}
+.noInput {
+  text-align: center;
+  padding: 6px;
+}

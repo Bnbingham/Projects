@@ -1,0 +1,134 @@
+<div class="container">
+  <div class="row pt-5 pb-5">
+    <h1 class="h1 col-3">🆂🆀🆄🅰🆆🅺🅴🆁</h1>
+    <div class="col-3"></div>
+    <div class="col-6 text-right">
+      <form
+        *ngIf="!passwordReset"
+        #loginForm="ngForm"
+        (submit)="submitLogin(loginForm.value)"
+        class="d-inline-flex"
+      >
+        <div class="">
+          <input
+            ngModel
+            class="form-control shadow1"
+            #username="ngModel"
+            required
+            placeholder="Username"
+            type="text"
+            name="username"
+          />
+        </div>
+        <div class="">
+          <input
+            ngModel
+            class="form-control shadow1"
+            #password="ngModel"
+            required
+            placeholder="Password"
+            type="password"
+            name="password"
+          />
+        </div>
+        <div class="">
+          <input
+            class="form-control shadow1 pl-4 pr-4 btn btn-outline-light"
+            [disabled]="!loginForm.valid"
+            type="submit"
+            value="submit"
+          />
+        </div>
+      </form>
+      <password-reset
+        (onReset)="onReset($event)"
+        *ngIf="passwordReset"
+      ></password-reset>
+      <a *ngIf="!passwordReset" (click)="togglePasswordReset()"
+        >🆁🅴🆂🅴🆃 🅿🅰🆂🆂🆆🅾🆁🅳</a
+      >
+      <a *ngIf="passwordReset" (click)="togglePasswordReset()" id="respassback"
+        >Back to login</a
+      >
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <about-us></about-us>
+    </div>
+    <div class="col-6">
+      <h3 class="pt-3 pb-3">🆂🅸🅶🅽 🆄🅿</h3>
+      <form
+        #registerForm="ngForm"
+        (submit)="submitRegisteration(registerForm.value)"
+        class=""
+      >
+        <div class="form-group">
+          <input
+            ngModel
+            class="form-control shadow1"
+            #username="ngModel"
+            required
+            placeholder="username"
+            type="text"
+            name="username"
+          />
+        </div>
+        <div class="form-group">
+          <input
+            ngModel
+            class="form-control shadow1"
+            #password="ngModel"
+            required
+            placeholder="Password"
+            type="password"
+            name="password"
+          />
+        </div>
+        <div class="form-group">
+          <input
+            ngModel
+            class="form-control shadow1"
+            #email="ngModel"
+            required
+            placeholder="email"
+            type="email"
+            name="email"
+          />
+        </div>
+        <div class="form-group">
+          <input
+            ngModel
+            class="form-control shadow1"
+            #firstName="ngModel"
+            required
+            placeholder="firstName"
+            type="text"
+            name="firstName"
+          />
+        </div>
+        <div class="form-group">
+          <input
+            ngModel
+            class="form-control shadow1"
+            #lastName="ngModel"
+            required
+            placeholder="lastName"
+            type="text"
+            name="lastName"
+          />
+        </div>
+        <div class="form-group">
+          <input
+            class="btn btn-outline-light form-control shadow1"
+            [disabled]="!registerForm.valid"
+            type="submit"
+            value="Sign-up"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="row pb-2">
+  <div class="col-3"></div>
+
+  <div class="col-9">
+    <form>
+      <div class="row container">
+        <!-- <div [ngStyle]="picture" class="avatar"></div> -->
+        <img
+          *ngIf="!user.picLink"
+          [src]="image"
+          height="100px"
+          width="100px"
+          alt=""
+        />
+        <img
+          *ngIf="user.picLink"
+          [src]="'data:image/jpg;base64,' + user.picLink"
+          height="100px"
+          width="100px"
+          alt=""
+        />
+      </div>
+      <div class="row container">
+        <p class="text-center">
+          FULL NAME: {{ user.firstName + " " + user.lastName }}
+        </p>
+      </div>
+      <div class="row container">
+        <p class="text-center">EMAIL: {{ user.email }}</p>
+      </div>
+      <div class="row container">
+        <p class="text-center">ABOUT ME: {{ user.bio }}</p>
+      </div>
+    </form>
+  </div>
+</div>
