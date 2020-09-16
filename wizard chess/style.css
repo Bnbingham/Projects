@@ -1,0 +1,32 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-align: center;
+}
+#topBar {
+  background-color: gray;
+  padding: 5px;
+  margin-bottom: 10px;
+  color: white;
+}
+.row {
+  display: flex;
+}
+.col {
+  width: 50%;
+}
+canvas {
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+}
+
+#hand {
+  display: flex;
+  flex-wrap: wrap;
+}
+.card {
+  height: 75px;
+  width: 50px;
+  border: 1px solid black;
+  margin: 10px;
+}

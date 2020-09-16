@@ -5,4 +5,5 @@
   - Java, SQL and Angular - Application to simplify and orchestrate the reimbursement form submission, approval and availability. 
 ## Car Dealership 
   - Java and SQL - Console based application for managing inventory, sales and payments for a car dealership
-
+## Wizard Chess
+  - HTML, CSS, JavaScript - A game designed by my friend, brought to life as an application by me
