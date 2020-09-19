@@ -1,0 +1,30 @@
+* {
+  border: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+#handPerimeter {
+  justify-content: center;
+}
+#discardPerimeter {
+  justify-content: center;
+}
+#activePerimeter {
+  border: 1px solid black;
+  height: 100%;
+}
+#cardPerimeter {
+  height: 80px;
+  width: 60px;
+  border: 1px solid red;
+}
+canvas {
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+}
+button {
+  background-color: lightgray;
+  border-radius: 5px;
+}
+button:hover {
+  background-color: lightslategray;
+}

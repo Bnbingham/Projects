@@ -1,0 +1,15 @@
+#topBar {
+  background-color: grey;
+  color: white;
+  text-align: center;
+}
+#playArea {
+  text-align: center;
+  border: 1px solid black;
+}
+#gameBoard {
+  border: 1px solid black;
+}
+#playerMat {
+  border: 1px solid black;
+}

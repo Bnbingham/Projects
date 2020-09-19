@@ -1,0 +1,6 @@
+[
+  { "id": 1, "type": "move", "subType": "step", "action": [0, 1] },
+  { "id": 2, "type": "move", "subType": "step", "action": [0, -1] },
+  { "id": 3, "type": "move", "subType": "step", "action": [-1, 0] },
+  { "id": 4, "type": "move", "subType": "step", "action": [1, 0] }
+]
