@@ -33,8 +33,8 @@ export class CanvasService {
     this.drawBoard();
     this.drawPlayers();
   }
-
-  public actionSwitch(input: Card, player = this.p2) {
+  //----------------------------------------------------
+  public actionSwitch(input: Card, player = this.p1) {
     switch (input.type) {
       case "move":
         this.moveSwitch(input, player);
@@ -75,7 +75,7 @@ export class CanvasService {
   private attackSwitch(input: Card, player: Player) {
     switch (input.subType) {
       case "beam":
-        this.drawBeam(input, player);
+        this.drawRay(input, player);
         break;
 
       default:
@@ -89,6 +89,7 @@ export class CanvasService {
     this.drawBoard();
     this.drawPlayers();
   }
+
   private drawBoard() {
     //board
     let sqr = this.gb.sqrSize;
@@ -104,6 +105,7 @@ export class CanvasService {
     this.ctx.fillStyle = "orange";
     this.ctx.fillRect(0, 159, 160, 2);
   }
+
   private drawPlayers() {
     let ts = this.gb.tokenSize;
     let p1x = this.pt1.x;
@@ -116,27 +118,86 @@ export class CanvasService {
     this.ctx.fillStyle = "rgb(0, 0, 200)";
     this.ctx.fillRect(p2x, p2y, ts, ts);
   }
-  private drawBeam(input: Card, player) {
-    //beam[0] is forward, beam[1] is left(-) right(+)
 
-    let beamPath = [1, 0];
-    let beamColor = "green";
-    let beamSize = this.gb.tokenSize;
+  private drawRay(input: Card, player) {
+    //beam[0] is forward, ray[1] is left(-) right(+)
+    //todo: inverse sideways path for player 2
+    let rayPath = input.action;
+    let rayColor = "green";
+    let raySize = this.gb.tokenSize;
+    let rayWidth = raySize;
+    let rayLengthForward =
+      raySize * rayPath[0] + (rayPath[0] - 1) * 2 * this.gb.border;
+    let rayLengthSideways =
+      raySize * rayPath[1] + rayPath[1] * 2 * this.gb.border;
     let p: PlayerToken;
-    let off1: number;
-    let off2: number = 2 * this.gb.border; //start here
+    let offsetY: number;
+    let offsetX: number;
+    let offsetP2Y: number;
     if (player == this.p1) {
       p = this.pt1;
-      off1 = this.gb.sqrSize;
-    } else {
+      offsetY = this.gb.sqrSize;
+      if (rayPath[1] != 0) {
+        offsetP2Y = rayLengthForward + 2 * this.gb.border - offsetY;
+        if (rayPath[1] > 0) {
+          offsetX = raySize;
+        } else {
+          offsetX = 0;
+        }
+      }
+    } else if (player == this.p2) {
       p = this.pt2;
-      off1 = -this.gb.sqrSize * beamPath[0];
+      offsetY = -this.gb.sqrSize * rayPath[0];
+      if (rayPath[1] != 0) {
+        if (rayPath[1] > 0) {
+          offsetX = raySize;
+        } else {
+          offsetX = 0;
+        }
+      }
     }
 
     //forward beam
-    this.ctx.fillStyle = beamColor;
-    this.ctx.fillRect(p.x, p.y + off1, beamSize, beamSize * beamPath[0] + off2);
+    this.ctx.fillStyle = rayColor;
+    this.ctx.fillRect(p.x, p.y + offsetY, rayWidth, rayLengthForward);
 
     //sideways beam
+    this.ctx.fillRect(
+      p.x + offsetX,
+      p.y + offsetY + offsetP2Y,
+      rayLengthSideways,
+      rayWidth
+    );
+  }
+
+  drawCard(input: Card) {
+    this.canvas = document.getElementById(String(input.id));
+    this.ctx = this.canvas.getContext("2d");
+    //TODO: modify drawBoard to draw one on a card
+    if (input.type == "move") {
+      switch (input.subType) {
+        case "step":
+          //code here
+          break;
+        case "teleport":
+          //code here
+          break;
+        default:
+          //code here
+          break;
+      }
+    } else if (input.type == "attack") {
+      switch (input.subType) {
+        case "ray":
+          //code here
+          break;
+        case "AOE":
+          //code here
+          break;
+        default:
+          //code here
+          break;
+      }
+    }
   }
 }
