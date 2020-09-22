@@ -31,10 +31,10 @@ export class CanvasService {
   //----------------------------------------------------
   public actionSwitch(input: Card, player = this.p2) {
     switch (input.type) {
-      case "move":
+      case "Movement":
         this.moveSwitch(input, player);
         break;
-      case "attack":
+      case "Attack":
         this.attackSwitch(input, player);
         break;
       default:
@@ -70,7 +70,7 @@ export class CanvasService {
   private attackSwitch(input: Card, player: Player) {
     switch (input.subType) {
       case "ray":
-        this.drawRay(input, this.gb, player);
+        this.drawRay(input, player);
         break;
 
       default:
@@ -91,12 +91,15 @@ export class CanvasService {
     let totalRows = board.totalRows;
     let totalCols = 4;
     let currRow = 0;
-
     let sqr = board.sqrSize;
+    let centerGrid = 0;
+    if (totalRows <= 4) {
+      centerGrid = 2 * sqr;
+    }
     while (currRow < totalRows) {
       for (let currCol = 0; currCol < totalCols; currCol++) {
         let x = currCol * sqr;
-        board.ctx.strokeRect(x, currRow * sqr, sqr, sqr);
+        board.ctx.strokeRect(x, currRow * sqr + centerGrid, sqr, sqr);
       }
       currRow++;
     }
@@ -122,9 +125,10 @@ export class CanvasService {
     board.ctx.fillRect(p2x, p2y, ts, ts);
   }
 
-  private drawRay(input: Card, board: Board, player) {
+  private drawRay(input: Card, player) {
     //beam[0] is forward, ray[1] is left(-) right(+)
     //todo: inverse sideways path for player 2
+    let board = this.gb;
     let rayPath = input.action;
     let rayColor = "green";
     let raySize = this.gb.tokenSize;
@@ -136,7 +140,7 @@ export class CanvasService {
     let p: PlayerToken;
     let offsetY: number;
     let offsetX: number;
-    let offsetP2Y: number;
+    let offsetP2Y: number = 0;
     if (player == this.p1) {
       p = this.pt1;
       offsetY = this.gb.sqrSize;
@@ -175,20 +179,21 @@ export class CanvasService {
 
   drawCard(input: Card) {
     let board;
-    if (input.type == "move") {
+    let sqrSize = 10;
+    if (input.type == "Movement") {
       //set up 4 x 4 board
-      board = new Board(10, 4, String(input.id));
+      board = new Board(sqrSize, 4, String(input.id));
       switch (input.subType) {
         case "step":
           let xStart = 1;
           let xFinish = 1 + input.action[0];
-          let yStart = 1;
-          let yFinish = 1 + input.action[1];
+          let yStart = 3;
+          let yFinish = 3 + input.action[1];
           if (xFinish == 0) {
             xStart += 1;
             xFinish += 1;
           }
-          if (yFinish == 0) {
+          if (yFinish == 2) {
             yStart += 1;
             yFinish += 1;
           }
@@ -196,9 +201,19 @@ export class CanvasService {
           board.getCanvasContext();
           this.drawBoard(board);
           board.ctx.fillStyle = "darkGrey";
-          board.ctx.fillRect(10 * xStart, 10 * yStart, 10, 10);
+          board.ctx.fillRect(
+            sqrSize * xStart,
+            sqrSize * yStart,
+            sqrSize,
+            sqrSize
+          );
           board.ctx.fillStyle = "lightGrey";
-          board.ctx.fillRect(10 * xFinish, 10 * yFinish, 10, 10);
+          board.ctx.fillRect(
+            sqrSize * xFinish,
+            sqrSize * yFinish,
+            sqrSize,
+            sqrSize
+          );
           break;
         case "teleport":
           board.tknPadding = 0;
@@ -206,28 +221,83 @@ export class CanvasService {
           this.drawBoard(board);
           board.ctx.fillStyle = "darkGrey";
           board.ctx.fillRect(
-            10 * input.action[0],
-            10 * input.action[1],
-            10,
-            10
+            sqrSize * input.action[0],
+            sqrSize * (input.action[1] + 2),
+            sqrSize,
+            sqrSize
           );
           break;
         default:
           //code here
           break;
       }
-    } else if (input.type == "attack") {
+    } else if (input.type == "Attack") {
       switch (input.subType) {
         case "ray":
+          let rayStart = 3;
           //set up a full board without a centerline
-          board = new Board(10, 8, String(input.id));
+          board = new Board(sqrSize, 8, String(input.id));
           board.tknPadding = 0;
           board.getCanvasContext();
           this.drawBoard(board, false);
+          //0:1,1:1,2:0,3:0  -1:2,-2:3,-3,3
+          switch (input.action[1]) {
+            case 0:
+            case 1:
+              rayStart = 1;
+              break;
+            case 2:
+            case 3:
+              rayStart = 0;
+              break;
+            case -1:
+              rayStart = 2;
+              break;
+            case -2:
+            case -3:
+              rayStart = 3;
+              break;
+            default:
+              break;
+          }
+          board.ctx.fillStyle = "darkGrey";
+          board.ctx.fillRect(sqrSize * rayStart, sqrSize * 7, sqrSize, sqrSize);
+          board.ctx.fillStyle = "lightGrey";
+          for (let i = 0; i < input.action[0]; i++) {
+            board.ctx.fillRect(
+              sqrSize * rayStart,
+              sqrSize * (6 - i),
+              sqrSize,
+              sqrSize
+            );
+          }
+          if (input.action[1] != 0) {
+            if (input.action[1] > 0) {
+              //ray right
+              for (let i = 0; i < input.action[1]; i++) {
+                board.ctx.fillRect(
+                  sqrSize * (rayStart + 1 + i),
+                  sqrSize * (7 - input.action[0]),
+                  sqrSize,
+                  sqrSize
+                );
+              }
+            } else {
+              //ray left
+              for (let j = 0; j > input.action[1]; j--) {
+                board.ctx.fillRect(
+                  sqrSize * (rayStart - 1 + j),
+                  sqrSize * (7 - input.action[0]),
+                  sqrSize,
+                  sqrSize
+                );
+              }
+            }
+          }
           break;
         case "AOE":
           //set up 4 x 4 board
-          board = new Board(10, 4, String(input.id));
+          board = new Board(sqrSize, 4, String(input.id));
           board.tknPadding = 0;
           board.getCanvasContext();
           this.drawBoard(board);
@@ -235,7 +305,7 @@ export class CanvasService {
             let x = index[0];
             let y = index[1];
             board.ctx.fillStyle = "darkGrey";
-            board.ctx.fillRect(10 * x, 10 * y, 10, 10);
+            board.ctx.fillRect(sqrSize * x, sqrSize * y, sqrSize, sqrSize);
           });
           break;
         default:

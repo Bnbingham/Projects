@@ -10,6 +10,6 @@ export class HandComponent implements OnInit {
   constructor(private cardService: CardService) {}
   inHand: any;
   ngOnInit(): void {
-    this.inHand = this.cardService.cards;
+    this.inHand = this.cardService.inHand;
   }
 }

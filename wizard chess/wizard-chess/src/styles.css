@@ -14,12 +14,18 @@
   height: 100%;
 }
 #cardPerimeter {
-  height: 80px;
-  width: 60px;
-  border: 1px solid red;
+  padding: 5px;
+  margin: 10px;
+  height: 170px;
+  width: 90px;
+  border: 1px solid black;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+}
+#myCanvas {
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
 }
 canvas {
-  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+  margin: 5px;
 }
 button {
   background-color: lightgray;

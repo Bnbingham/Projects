@@ -1,7 +1,19 @@
 <div id="cardPerimeter">
   <div>{{ cardData.type }}</div>
   <div>{{ cardData.subType }}</div>
-  <canvas [id]="cardData.id" width="40" height="70" style="color: black">
+  <div
+    style="border: 1px solid black"
+    [ngStyle]="{ 'background-color': cardData.color }"
+  >
+    {{ cardData.color }}
+  </div>
+  <canvas
+    (click)="onClick()"
+    [id]="cardData.id"
+    width="40"
+    height="80"
+    style="color: black"
+  >
   </canvas>
-  <button (click)="onClick()">run</button>
+  <!-- <button (click)="onClick()">test</button> -->
 </div>
