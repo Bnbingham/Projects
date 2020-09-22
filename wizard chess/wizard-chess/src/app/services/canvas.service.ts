@@ -46,18 +46,20 @@ export class CanvasService {
     //old location to new location
     let currL = player.location;
     switch (input.subType) {
-      case "step":
+      case "Step":
         //check new location
         let newX = currL[0] + input.action[0];
-        let newY = currL[1] + input.action[1];
+        let newY = currL[1] - input.action[1];
         if (newX >= 0 && newX <= 3) {
           currL[0] = currL[0] + input.action[0];
         }
+        console.log(newY);
         if (newY >= 0 && newY <= 3) {
-          currL[1] += input.action[1];
+          console.log("in moveswitch");
+          currL[1] -= input.action[1];
         }
         break;
-      case "teleport":
+      case "Teleport":
         currL[0] = input.action[0];
         currL[1] = input.action[1];
         break;
@@ -69,7 +71,7 @@ export class CanvasService {
   }
   private attackSwitch(input: Card, player: Player) {
     switch (input.subType) {
-      case "ray":
+      case "Ray":
         this.drawRay(input, player);
         break;
 
@@ -92,14 +94,25 @@ export class CanvasService {
     let totalCols = 4;
     let currRow = 0;
     let sqr = board.sqrSize;
-    let centerGrid = 0;
-    if (totalRows <= 4) {
-      centerGrid = 2 * sqr;
+    let centerGridY = 0;
+    let centerGridX = 0;
+    switch (totalRows) {
+      case 3:
+        centerGridY = 2.5 * sqr;
+        centerGridX = 0.5 * sqr;
+        totalCols = 3;
+        break;
+      case 4:
+        centerGridY = 2 * sqr;
+        break;
+      default:
+        break;
     }
+
     while (currRow < totalRows) {
       for (let currCol = 0; currCol < totalCols; currCol++) {
-        let x = currCol * sqr;
-        board.ctx.strokeRect(x, currRow * sqr + centerGrid, sqr, sqr);
+        let x = currCol * sqr + centerGridX;
+        board.ctx.strokeRect(x, currRow * sqr + centerGridY, sqr, sqr);
       }
       currRow++;
     }
@@ -182,40 +195,31 @@ export class CanvasService {
     let sqrSize = 10;
     if (input.type == "Movement") {
       //set up 4 x 4 board
-      board = new Board(sqrSize, 4, String(input.id));
+
       switch (input.subType) {
-        case "step":
-          let xStart = 1;
-          let xFinish = 1 + input.action[0];
-          let yStart = 3;
-          let yFinish = 3 + input.action[1];
-          if (xFinish == 0) {
-            xStart += 1;
-            xFinish += 1;
-          }
-          if (yFinish == 2) {
-            yStart += 1;
-            yFinish += 1;
-          }
+        case "Step":
+          board = new Board(sqrSize, 3, String(input.id));
           board.tknPadding = 0;
           board.getCanvasContext();
           this.drawBoard(board);
-          board.ctx.fillStyle = "darkGrey";
+
+          board.ctx.fillStyle = "black";
           board.ctx.fillRect(
-            sqrSize * xStart,
-            sqrSize * yStart,
+            sqrSize * 1 + 0.5 * sqrSize,
+            sqrSize * 1 + 2.5 * sqrSize,
             sqrSize,
             sqrSize
           );
-          board.ctx.fillStyle = "lightGrey";
+          board.ctx.fillStyle = "darkgrey";
           board.ctx.fillRect(
-            sqrSize * xFinish,
-            sqrSize * yFinish,
+            sqrSize * (1 + input.action[0]) + 0.5 * sqrSize,
+            sqrSize * (1 - input.action[1]) + 2.5 * sqrSize,
             sqrSize,
             sqrSize
           );
           break;
-        case "teleport":
+        case "Teleport":
+          board = new Board(sqrSize, 4, String(input.id));
           board.tknPadding = 0;
           board.getCanvasContext();
           this.drawBoard(board);
@@ -233,14 +237,13 @@ export class CanvasService {
       }
     } else if (input.type == "Attack") {
       switch (input.subType) {
-        case "ray":
+        case "Ray":
           let rayStart = 3;
           //set up a full board without a centerline
           board = new Board(sqrSize, 8, String(input.id));
           board.tknPadding = 0;
           board.getCanvasContext();
           this.drawBoard(board, false);
-          //0:1,1:1,2:0,3:0  -1:2,-2:3,-3,3
           switch (input.action[1]) {
             case 0:
             case 1:
@@ -260,9 +263,9 @@ export class CanvasService {
             default:
               break;
           }
-          board.ctx.fillStyle = "darkGrey";
+          board.ctx.fillStyle = "black";
           board.ctx.fillRect(sqrSize * rayStart, sqrSize * 7, sqrSize, sqrSize);
-          board.ctx.fillStyle = "lightGrey";
+          board.ctx.fillStyle = "darkgrey";
           for (let i = 0; i < input.action[0]; i++) {
             board.ctx.fillRect(
               sqrSize * rayStart,
@@ -303,7 +306,7 @@ export class CanvasService {
           this.drawBoard(board);
           input.action.forEach((index) => {
             let x = index[0];
-            let y = index[1];
+            let y = index[1] + 2;
             board.ctx.fillStyle = "darkGrey";
             board.ctx.fillRect(sqrSize * x, sqrSize * y, sqrSize, sqrSize);
           });
@@ -315,3 +318,4 @@ export class CanvasService {
     }
   }
 }
+//todo: hover card to show effect on board

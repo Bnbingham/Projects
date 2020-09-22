@@ -28,7 +28,6 @@ export class PlayerToken {
   }
   public get y() {
     let offset = 0;
-    console.log(this._player);
     if (this._player.id == 2) {
       offset = 160;
     }
