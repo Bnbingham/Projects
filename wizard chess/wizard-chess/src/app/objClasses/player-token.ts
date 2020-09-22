@@ -22,7 +22,9 @@ export class PlayerToken {
     this._board = input;
   }
   public get x() {
-    return this._player.location[0] * this.board.sqrSize + this.board.border;
+    return (
+      this._player.location[0] * this.board.sqrSize + this.board.tknPadding
+    );
   }
   public get y() {
     let offset = 0;
@@ -31,7 +33,9 @@ export class PlayerToken {
       offset = 160;
     }
     return (
-      this._player.location[1] * this.board.sqrSize + this.board.border + offset
+      this._player.location[1] * this.board.sqrSize +
+      this.board.tknPadding +
+      offset
     );
   }
 }

@@ -12,7 +12,11 @@ export class CardComponent implements OnInit {
 
   constructor(private canvasService: CanvasService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.canvasService.drawCard(this.cardData);
+    }, 1);
+  }
   onClick() {
     this.canvasService.actionSwitch(this.cardData);
   }

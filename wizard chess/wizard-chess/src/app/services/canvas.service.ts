@@ -9,8 +9,6 @@ import { Injectable } from "@angular/core";
 })
 export class CanvasService {
   constructor() {}
-  private canvas;
-  private ctx;
 
   private gb: Board;
   private p1: Player;
@@ -19,10 +17,7 @@ export class CanvasService {
   private pt2: PlayerToken;
 
   public start() {
-    this.canvas = document.getElementById("myCanvas");
-    this.ctx = this.canvas.getContext("2d");
-
-    this.gb = new Board();
+    this.gb = new Board(40, 8, "myCanvas");
 
     this.p1 = new Player(1, [0, 0]);
     this.p2 = new Player(2, [0, 0]);
@@ -30,11 +25,11 @@ export class CanvasService {
     this.pt1 = new PlayerToken(this.p1, this.gb);
     this.pt2 = new PlayerToken(this.p2, this.gb);
 
-    this.drawBoard();
+    this.drawBoard(this.gb);
     this.drawPlayers();
   }
   //----------------------------------------------------
-  public actionSwitch(input: Card, player = this.p1) {
+  public actionSwitch(input: Card, player = this.p2) {
     switch (input.type) {
       case "move":
         this.moveSwitch(input, player);
@@ -74,8 +69,8 @@ export class CanvasService {
   }
   private attackSwitch(input: Card, player: Player) {
     switch (input.subType) {
-      case "beam":
-        this.drawRay(input, player);
+      case "ray":
+        this.drawRay(input, this.gb, player);
         break;
 
       default:
@@ -85,25 +80,32 @@ export class CanvasService {
   //  --------------------------------------------- //
   private reDraw() {
     let board = this.gb;
-    this.ctx.clearRect(0, 0, board.width, board.height);
-    this.drawBoard();
+    board.ctx.clearRect(0, 0, board.width, board.height);
+    this.drawBoard(this.gb);
     this.drawPlayers();
   }
 
-  private drawBoard() {
+  private drawBoard(board: Board, centerLine = true) {
     //board
-    let sqr = this.gb.sqrSize;
-    let row = 0;
-    while (row < 8) {
-      for (let col = 0; col < 4; col++) {
-        let x = col * sqr;
-        this.ctx.strokeRect(x, row * sqr, sqr, sqr);
+    board.getCanvasContext();
+    let totalRows = board.totalRows;
+    let totalCols = 4;
+    let currRow = 0;
+
+    let sqr = board.sqrSize;
+    while (currRow < totalRows) {
+      for (let currCol = 0; currCol < totalCols; currCol++) {
+        let x = currCol * sqr;
+        board.ctx.strokeRect(x, currRow * sqr, sqr, sqr);
       }
-      row++;
+      currRow++;
     }
     //center line
-    this.ctx.fillStyle = "orange";
-    this.ctx.fillRect(0, 159, 160, 2);
+    if (board.totalRows > 4 && centerLine) {
+      board.ctx.fillStyle = "orange";
+      let halfBoard = 4 * sqr;
+      board.ctx.fillRect(0, halfBoard - 1, halfBoard, 2);
+    }
   }
 
   private drawPlayers() {
@@ -112,14 +114,15 @@ export class CanvasService {
     let p1y = this.pt1.y;
     let p2x = this.pt2.x;
     let p2y = this.pt2.y;
-    this.ctx.fillStyle = "rgb(200, 0, 0)";
-    this.ctx.fillRect(p1x, p1y, ts, ts);
+    let board = this.gb;
+    board.ctx.fillStyle = "rgb(200, 0, 0)";
+    board.ctx.fillRect(p1x, p1y, ts, ts);
 
-    this.ctx.fillStyle = "rgb(0, 0, 200)";
-    this.ctx.fillRect(p2x, p2y, ts, ts);
+    board.ctx.fillStyle = "rgb(0, 0, 200)";
+    board.ctx.fillRect(p2x, p2y, ts, ts);
   }
 
-  private drawRay(input: Card, player) {
+  private drawRay(input: Card, board: Board, player) {
     //beam[0] is forward, ray[1] is left(-) right(+)
     //todo: inverse sideways path for player 2
     let rayPath = input.action;
@@ -127,9 +130,9 @@ export class CanvasService {
     let raySize = this.gb.tokenSize;
     let rayWidth = raySize;
     let rayLengthForward =
-      raySize * rayPath[0] + (rayPath[0] - 1) * 2 * this.gb.border;
+      raySize * rayPath[0] + (rayPath[0] - 1) * 2 * this.gb.tknPadding;
     let rayLengthSideways =
-      raySize * rayPath[1] + rayPath[1] * 2 * this.gb.border;
+      raySize * rayPath[1] + rayPath[1] * 2 * this.gb.tknPadding;
     let p: PlayerToken;
     let offsetY: number;
     let offsetX: number;
@@ -138,7 +141,7 @@ export class CanvasService {
       p = this.pt1;
       offsetY = this.gb.sqrSize;
       if (rayPath[1] != 0) {
-        offsetP2Y = rayLengthForward + 2 * this.gb.border - offsetY;
+        offsetP2Y = rayLengthForward + 2 * this.gb.tknPadding - offsetY;
         if (rayPath[1] > 0) {
           offsetX = raySize;
         } else {
@@ -158,11 +161,11 @@ export class CanvasService {
     }
 
     //forward beam
-    this.ctx.fillStyle = rayColor;
-    this.ctx.fillRect(p.x, p.y + offsetY, rayWidth, rayLengthForward);
+    board.ctx.fillStyle = rayColor;
+    board.ctx.fillRect(p.x, p.y + offsetY, rayWidth, rayLengthForward);
 
     //sideways beam
-    this.ctx.fillRect(
+    board.ctx.fillRect(
       p.x + offsetX,
       p.y + offsetY + offsetP2Y,
       rayLengthSideways,
@@ -171,16 +174,43 @@ export class CanvasService {
   }
 
   drawCard(input: Card) {
-    this.canvas = document.getElementById(String(input.id));
-    this.ctx = this.canvas.getContext("2d");
-    //TODO: modify drawBoard to draw one on a card
+    let board;
     if (input.type == "move") {
+      //set up 4 x 4 board
+      board = new Board(10, 4, String(input.id));
       switch (input.subType) {
         case "step":
-          //code here
+          let xStart = 1;
+          let xFinish = 1 + input.action[0];
+          let yStart = 1;
+          let yFinish = 1 + input.action[1];
+          if (xFinish == 0) {
+            xStart += 1;
+            xFinish += 1;
+          }
+          if (yFinish == 0) {
+            yStart += 1;
+            yFinish += 1;
+          }
+          board.tknPadding = 0;
+          board.getCanvasContext();
+          this.drawBoard(board);
+          board.ctx.fillStyle = "darkGrey";
+          board.ctx.fillRect(10 * xStart, 10 * yStart, 10, 10);
+          board.ctx.fillStyle = "lightGrey";
+          board.ctx.fillRect(10 * xFinish, 10 * yFinish, 10, 10);
           break;
         case "teleport":
-          //code here
+          board.tknPadding = 0;
+          board.getCanvasContext();
+          this.drawBoard(board);
+          board.ctx.fillStyle = "darkGrey";
+          board.ctx.fillRect(
+            10 * input.action[0],
+            10 * input.action[1],
+            10,
+            10
+          );
           break;
         default:
           //code here
@@ -189,10 +219,24 @@ export class CanvasService {
     } else if (input.type == "attack") {
       switch (input.subType) {
         case "ray":
-          //code here
+          //set up a full board without a centerline
+          board = new Board(10, 8, String(input.id));
+          board.tknPadding = 0;
+          board.getCanvasContext();
+          this.drawBoard(board, false);
           break;
         case "AOE":
-          //code here
+          //set up 4 x 4 board
+          board = new Board(10, 4, String(input.id));
+          board.tknPadding = 0;
+          board.getCanvasContext();
+          this.drawBoard(board);
+          input.action.forEach((index) => {
+            let x = index[0];
+            let y = index[1];
+            board.ctx.fillStyle = "darkGrey";
+            board.ctx.fillRect(10 * x, 10 * y, 10, 10);
+          });
           break;
         default:
           //code here
