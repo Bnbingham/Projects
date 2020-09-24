@@ -484,8 +484,8 @@ export class CardService {
     this.cards[51],
     this.cards[52],
     this.cards[53],
-    this.cards[54],
-    this.cards[55],
+    this.cards[34],
+    this.cards[13],
   ];
   constructor() {}
 }

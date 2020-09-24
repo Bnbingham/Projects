@@ -1,5 +1,5 @@
 export class Player {
-  constructor(_id: number, _location: number[]) {
+  constructor(_id?: number, _location?: number[]) {
     this.id = _id;
     this.location = _location;
   }

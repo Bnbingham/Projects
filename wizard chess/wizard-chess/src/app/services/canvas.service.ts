@@ -1,3 +1,4 @@
+import { PlayerService } from "./player.service";
 import { PlayerToken } from "./../objClasses/player-token";
 import { Board } from "./../objClasses/board";
 import { Player } from "./../objClasses/Player";
@@ -8,19 +9,21 @@ import { Injectable } from "@angular/core";
   providedIn: "root",
 })
 export class CanvasService {
-  constructor() {}
+  constructor(private playerService: PlayerService) {}
 
   private gb: Board;
-  private p1: Player;
-  private p2: Player;
+  public p1: Player;
+  public p2: Player;
   private pt1: PlayerToken;
   private pt2: PlayerToken;
 
   public start() {
     this.gb = new Board(40, 8, "myCanvas");
 
-    this.p1 = new Player(1, [0, 0]);
-    this.p2 = new Player(2, [0, 0]);
+    this.playerService.newPlayers();
+
+    this.p1 = this.playerService.p1;
+    this.p2 = this.playerService.p2;
 
     this.pt1 = new PlayerToken(this.p1, this.gb);
     this.pt2 = new PlayerToken(this.p2, this.gb);
@@ -53,9 +56,7 @@ export class CanvasService {
         if (newX >= 0 && newX <= 3) {
           currL[0] = currL[0] + input.action[0];
         }
-        console.log(newY);
         if (newY >= 0 && newY <= 3) {
-          console.log("in moveswitch");
           currL[1] -= input.action[1];
         }
         break;
@@ -74,7 +75,9 @@ export class CanvasService {
       case "Ray":
         this.drawRay(input, player);
         break;
-
+      case "AOE":
+        this.drawAOE(input, player);
+        break;
       default:
         break;
     }
@@ -137,7 +140,17 @@ export class CanvasService {
     board.ctx.fillStyle = "rgb(0, 0, 200)";
     board.ctx.fillRect(p2x, p2y, ts, ts);
   }
+  private drawAOE(input: Card, player) {
+    let board = this.gb;
+    board.ctx.fillStyle = "orange";
+    let blast = board.tokenSize;
+    input.action.forEach((sqr) => {
+      let x = sqr[0] * board.sqrSize + board.tknPadding;
+      let y = sqr[1] * board.sqrSize + board.tknPadding;
 
+      board.ctx.fillRect(x, y, blast, blast);
+    });
+  }
   private drawRay(input: Card, player) {
     //beam[0] is forward, ray[1] is left(-) right(+)
     //todo: inverse sideways path for player 2

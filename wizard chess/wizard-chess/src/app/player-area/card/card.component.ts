@@ -1,3 +1,4 @@
+import { HitboxService } from "./../../services/hitbox.service";
 import { Card } from "./../../objClasses/card";
 import { Component, Input, OnInit } from "@angular/core";
 import { CanvasService } from "src/app/services/canvas.service";
@@ -10,7 +11,10 @@ import { CanvasService } from "src/app/services/canvas.service";
 export class CardComponent implements OnInit {
   @Input() cardData: Card = new Card();
 
-  constructor(private canvasService: CanvasService) {}
+  constructor(
+    private canvasService: CanvasService,
+    private hitBoxService: HitboxService
+  ) {}
 
   ngOnInit(): void {
     setTimeout(() => {
@@ -19,5 +23,8 @@ export class CardComponent implements OnInit {
   }
   onClick() {
     this.canvasService.actionSwitch(this.cardData);
+    if (this.cardData.type == "Attack") {
+      this.hitBoxService.checkHit(this.cardData);
+    }
   }
 }

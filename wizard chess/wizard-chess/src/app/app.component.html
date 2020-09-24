@@ -2,9 +2,29 @@
   <h2>wizard chess</h2>
 </div>
 <div class="" id="playArea">
-  <div class="col" id="gameBoard">
+  <div class="col row" id="gameBoard">
+    <!-- p1 side  -->
+    <div class="col">
+      <div class="card" style="background-color: red">Player 1</div>
+      <div class="card">
+        <div>Health: {{ p1.health }}</div>
+      </div>
+      <div class="card">
+        <div>Location: {{ p1.location[0] + ", " + p1.location[1] }}</div>
+      </div>
+    </div>
     <canvas id="myCanvas" width="160" height="320" style="color: black">
     </canvas>
+    <!-- p2 side -->
+    <div class="col">
+      <div class="card" style="background-color: blue">Player 2</div>
+      <div class="card">
+        <div>Health: {{ p2.health }}</div>
+      </div>
+      <div class="card">
+        <div>Location: {{ p2.location[0] + ", " + p2.location[1] }}</div>
+      </div>
+    </div>
   </div>
   <div class="col" id="playerMat">
     <h3>player mat</h3>
