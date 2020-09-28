@@ -56,6 +56,7 @@ export class HitboxService {
       if (hit) {
         //todo: hit logic
         console.log("hit");
+        this.onHit();
       } else {
         console.log("miss");
       }
@@ -73,11 +74,19 @@ export class HitboxService {
         }
       });
       if (hit) {
-        //todo: hit logic
         console.log("hit");
+        this.onHit();
       } else {
         console.log("miss");
       }
+    }
+  }
+  private onHit() {
+    let attackingPlayer = this.p2;
+    if (attackingPlayer == this.p2) {
+      --this.p1.health;
+    } else {
+      --this.p2.health;
     }
   }
 }

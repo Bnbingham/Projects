@@ -27,4 +27,10 @@ export class CardComponent implements OnInit {
       this.hitBoxService.checkHit(this.cardData);
     }
   }
+  onMouseEnter() {
+    this.canvasService.mouseEnterEffect(this.cardData);
+  }
+  onMouseLeave() {
+    this.canvasService.mouseLeaveEvent();
+  }
 }

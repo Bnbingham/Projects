@@ -17,6 +17,8 @@ export class CanvasService {
   private pt1: PlayerToken;
   private pt2: PlayerToken;
 
+  private turnHistory = [];
+
   public start() {
     this.gb = new Board(40, 8, "myCanvas");
 
@@ -28,11 +30,40 @@ export class CanvasService {
     this.pt1 = new PlayerToken(this.p1, this.gb);
     this.pt2 = new PlayerToken(this.p2, this.gb);
 
+    this.turnHistory.push([1, this.p2.location]);
     this.drawBoard(this.gb);
     this.drawPlayers();
   }
+  private saveCanvasHistory() {
+    let p1Clone = new Player();
+    p1Clone.id = 1;
+    p1Clone.location = [this.p1.location[0], this.p1.location[1]];
+    p1Clone.health = this.p1.health;
+    let p2Clone = new Player();
+    p2Clone.id = 2;
+    p2Clone.location = [this.p2.location[0], this.p2.location[1]];
+    p2Clone.health = this.p2.health;
+    this.turnHistory.push([
+      this.turnHistory[this.turnHistory.length - 1][0] + 1,
+      p1Clone,
+      p2Clone,
+    ]);
+  }
+  public restoreLastHistory(option?) {
+    let board = this.gb;
+    let last = this.turnHistory.pop();
+
+    this.p1.location = last[1].location;
+    this.p2.location = last[2].location;
+    if (option != "exceptHealth") {
+      this.p1.health = last[1].health;
+      this.p2.health = last[2].health;
+    }
+    this.reDraw();
+  }
   //----------------------------------------------------
   public actionSwitch(input: Card, player = this.p2) {
+    this.saveCanvasHistory();
     switch (input.type) {
       case "Movement":
         this.moveSwitch(input, player);
@@ -129,11 +160,12 @@ export class CanvasService {
 
   private drawPlayers() {
     let ts = this.gb.tokenSize;
+    let board = this.gb;
     let p1x = this.pt1.x;
     let p1y = this.pt1.y;
     let p2x = this.pt2.x;
     let p2y = this.pt2.y;
-    let board = this.gb;
+
     board.ctx.fillStyle = "rgb(200, 0, 0)";
     board.ctx.fillRect(p1x, p1y, ts, ts);
 
@@ -142,6 +174,7 @@ export class CanvasService {
   }
   private drawAOE(input: Card, player) {
     let board = this.gb;
+    this.saveCanvasHistory();
     board.ctx.fillStyle = "orange";
     let blast = board.tokenSize;
     input.action.forEach((sqr) => {
@@ -150,10 +183,15 @@ export class CanvasService {
 
       board.ctx.fillRect(x, y, blast, blast);
     });
+    setTimeout(() => {
+      console.log("in AOE");
+      this.restoreLastHistory("exceptHealth");
+    }, 2000);
   }
   private drawRay(input: Card, player) {
     //beam[0] is forward, ray[1] is left(-) right(+)
     //todo: inverse sideways path for player 2
+    this.saveCanvasHistory();
     let board = this.gb;
     let rayPath = input.action;
     let rayColor = "green";
@@ -201,6 +239,9 @@ export class CanvasService {
       rayLengthSideways,
       rayWidth
     );
+    setTimeout(() => {
+      this.restoreLastHistory("exceptHealth");
+    }, 2000);
   }
 
   drawCard(input: Card) {
@@ -330,5 +371,92 @@ export class CanvasService {
       }
     }
   }
+
+  public mouseEnterEffect(card: Card, player: Player = this.p2) {
+    //save effect
+    let board = this.gb;
+    let sqrSize = board.sqrSize;
+    let x;
+    let y;
+    switch (card.type) {
+      case "Movement":
+        console.log("in movement");
+        if (card.subType == "Step") {
+          x = this.p2.location[0] + card.action[0];
+          y = this.p2.location[1] - card.action[1];
+          if (x < 0) x = 0;
+          if (x > 3) x = 3;
+          if (y < 0) y = 0;
+          if (y > 3) y = 3;
+          board.ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
+          board.ctx.fillRect(
+            sqrSize * x,
+            board.height / 2 + sqrSize * y,
+            sqrSize,
+            sqrSize
+          );
+        } else {
+          x = card.action[0];
+          y = card.action[1];
+          board.ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
+          board.ctx.fillRect(
+            sqrSize * x,
+            board.height / 2 + sqrSize * y,
+            sqrSize,
+            sqrSize
+          );
+        }
+        break;
+      case "Attack":
+        console.log(this.p2.location);
+        if (card.subType == "Ray") {
+          let rayStart = this.p2.location[0];
+          board.ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
+          for (let i = 0; i < card.action[0]; i++) {
+            board.ctx.fillRect(
+              sqrSize * rayStart,
+              sqrSize * (i + this.p2.location[1]),
+              sqrSize,
+              sqrSize
+            );
+          }
+          if (card.action[1] != 0) {
+            if (card.action[1] > 0) {
+              //ray right
+              for (let i = 0; i < card.action[1]; i++) {
+                board.ctx.fillRect(
+                  sqrSize * (rayStart + 1 + i),
+                  sqrSize * (7 - card.action[0] - (3 - this.p2.location[1])),
+                  sqrSize,
+                  sqrSize
+                );
+              }
+            } else {
+              //ray left
+              for (let j = 0; j > card.action[1]; j--) {
+                board.ctx.fillRect(
+                  sqrSize * (rayStart - 1 + j),
+                  sqrSize * (7 - card.action[0] - (3 - this.p2.location[1])),
+                  sqrSize,
+                  sqrSize
+                );
+              }
+            }
+          }
+        } else {
+          for (let index = 0; index < card.action.length; index++) {
+            let x = card.action[index][0];
+            let y = card.action[index][1];
+            board.ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
+            board.ctx.fillRect(sqrSize * x, sqrSize * y, sqrSize, sqrSize);
+          }
+        }
+        break;
+      default:
+        break;
+    }
+  }
+  public mouseLeaveEvent() {
+    this.reDraw();
+  }
 }
-//todo: hover card to show effect on board

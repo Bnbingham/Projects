@@ -24,4 +24,7 @@ export class AppComponent {
     this.p1 = this.playerService.p1;
     this.p2 = this.playerService.p2;
   }
+  onClick() {
+    this.canvasService.restoreLastHistory();
+  }
 }

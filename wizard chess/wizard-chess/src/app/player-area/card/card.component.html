@@ -1,4 +1,8 @@
-<div id="cardPerimeter">
+<div
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()"
+  id="cardPerimeter"
+>
   <div>{{ cardData.type }}</div>
   <div>{{ cardData.subType }}</div>
   <div
